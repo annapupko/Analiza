@@ -1,0 +1,91 @@
+"""Anna pupko,321204182
+Alina korochkin,321108391"""
+
+import numpy as np
+from numpy.dual import solve
+from pprint import pprint
+
+def isDDM(a, n):
+    for i in range(0, 3):
+
+        sum = 0
+        for j in range(0, 3):
+            sum = sum + abs(a[i][j])
+
+        sum = sum - abs(a[i][i])
+
+        if (abs(a[i][i]) < sum):
+            return False
+
+    return True
+
+
+def seidel(a, x, b):
+    n = len(a)
+    for j in range(0, n):
+        d = b[j]
+
+        for i in range(0, n):
+            if (j != i):
+                d -= a[j][i] * x[i]
+        x[j] = d / a[j][j]
+    return x
+
+
+
+
+print("jacobi method\n")
+
+m = [[4, 2, 0], [2, 10, 4], [0, 4, 5]]
+print("\nDominant diagonal: ",isDDM(m, 3))
+
+
+
+
+
+f1 = lambda x, y, z: (2 - 2 * y) / 4
+f2 = lambda x, y, z: (6 - 2 * x - 4 * z) / 10
+f3 = lambda x, y, z: (5 - 4 * y) / 5
+
+
+def clac(f1, f2, f3):
+    x0 = 0
+    y0 = 0
+    z0 = 0
+
+    e = 0
+
+    condition = True
+
+    while condition:
+        x1 = f1(x0, y0, z0)
+        y1 = f2(x1, y0, z0)
+        z1 = f3(x1, y1, z0)
+        print('[%0.6f\t%0.6f\t%0.6f]\n' % ( x1, y1, z1))
+        e1 = abs(x0 - x1);
+        e2 = abs(y0 - y1);
+        e3 = abs(z0 - z1);
+
+
+        x0 = x1
+        y0 = y1
+        z0 = z1
+
+        condition = e1 > e and e2 > e and e3 > e
+
+
+(clac(f1, f2, f3))
+
+
+""" main """
+x = [0, 0, 0]
+a =[[4, 2, 0], [2, 10, 4], [0, 4, 5]]
+n = 3
+b = [2, 6, 5]
+print("seidel method\n")
+print("\nDominant diagonal: ",isDDM(a,3))
+print(x)
+
+for i in range(0, 25):
+    x = seidel(a, x, b)
+    print(x)
